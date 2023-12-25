@@ -12,7 +12,7 @@ class  BharPhyitServiceProvider extends ServiceProvider
     {
         if($this->app['log'] instanceof \Illuminate\Log\LogManager) {
             $this->app['log']->extend('bhar-phyit', function ($app, $config) {
-                $handler = new Handler(); 
+                $handler = new Handler();
 
                 return new Logger('bhar-phyit', [$handler]);
             });
@@ -22,9 +22,8 @@ class  BharPhyitServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
-        // $this->app->singleton(
-        //     \Tallerrs\BharPhyit\Exceptions\Handler::class,
-        // );
+        $this->publishes([
+            __DIR__.'/config/bhar-phyit.php' => config_path('bhar-phyit.php'),
+        ]);
     }
 }
