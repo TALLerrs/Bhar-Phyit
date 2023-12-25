@@ -4,6 +4,7 @@ namespace Tallerrs\BharPhyit;
 
 use Illuminate\Support\ServiceProvider;
 use Monolog\Logger;
+use Tallerrs\BharPhyit\Console\ClearBharPhyit;
 use Tallerrs\BharPhyit\Exceptions\Handler;
 
 class  BharPhyitServiceProvider extends ServiceProvider
@@ -17,6 +18,10 @@ class  BharPhyitServiceProvider extends ServiceProvider
                 return new Logger('bhar-phyit', [$handler]);
             });
         }
+
+        $this->commands([
+            ClearBharPhyit::class,
+        ]);
     }
 
     public function boot()
