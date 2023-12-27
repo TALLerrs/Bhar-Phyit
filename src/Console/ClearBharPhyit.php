@@ -20,7 +20,7 @@ class ClearBharPhyit extends Command
      *
      * @var string
      */
-    protected $description = 'Clear All Data f Bhar Phyit Logs';
+    protected $description = 'Clear All Data of Bhar Phyit Logs';
 
     /**
      * Execute the console command.
