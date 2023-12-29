@@ -3,6 +3,7 @@
 namespace Tallerrs\BharPhyit\Exceptions;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
 use Illuminate\Http\UploadedFile;
 use Monolog\Handler\AbstractProcessingHandler;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
@@ -11,8 +12,17 @@ use Tallers\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Tallers\BharPhyit\Models\BharPhyitErrorLog;
 use Throwable;
 
-class Handler extends AbstractProcessingHandler
+class BharPhyitHandler extends ExceptionsHandler
 {
+    public function report(Throwable $exception)
+    {
+        info('tesrting');
+        if ($this->shouldReport($exception)) {
+        }
+
+        parent::report($exception);
+    }
+
     protected array $queries = [];
 
     protected function write(LogRecord $record): void

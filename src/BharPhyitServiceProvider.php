@@ -3,21 +3,19 @@
 namespace Tallerrs\BharPhyit;
 
 use Illuminate\Support\ServiceProvider;
-use Monolog\Logger;
+use Tallerrs\BharPhyit\Exceptions\BharPhyitHandler;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
-use Tallerrs\BharPhyit\Exceptions\Handler;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class  BharPhyitServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        if($this->app['log'] instanceof \Illuminate\Log\LogManager) {
-            $this->app['log']->extend('bhar-phyit', function ($app, $config) {
-                $handler = new Handler();
-
-                return new Logger('bhar-phyit', [$handler]);
-            });
-        }
+        // $this->app->singleton(ErrorHandler::class, function ($app) {
+        //     return new ErrorHandler($app);
+        // });
+        
+        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
 
         $this->commands([
             ClearBharPhyit::class,
@@ -26,6 +24,8 @@ class  BharPhyitServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
+
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->publishes([
             __DIR__.'/config/bhar-phyit.php' => config_path('bhar-phyit.php'),
