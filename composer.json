@@ -5,7 +5,8 @@
     "require": {
         "monolog/monolog": "^3.5",
         "illuminate/support": "^10.38",
-        "php": "^8.2"
+        "php": "^8.2",
+        "livewire/livewire": "dev-main"
     },
     "require-dev": {
         "pestphp/pest": "^2.28"
@@ -30,7 +31,14 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tallerrs\\BharPhyit\\BharPhyitServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": false

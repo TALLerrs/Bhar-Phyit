@@ -3,8 +3,8 @@
 namespace Tallerrs\BharPhyit\Console;
 
 use Illuminate\Console\Command;
-use Tallers\BharPhyit\Models\BharPhyitErrorLog;
-use Tallers\BharPhyit\Models\BharPhyitErrorLogDetail;
+use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
+use Tallerrs\BharPhyit\Models\BharPhyitErrorLogDetail;
 
 class ClearBharPhyit extends Command
 {
