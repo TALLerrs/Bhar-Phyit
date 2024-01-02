@@ -8,16 +8,16 @@ use Illuminate\Http\UploadedFile;
 use Monolog\Handler\AbstractProcessingHandler;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 use Monolog\LogRecord;
-use Tallers\BharPhyit\Enums\BharPhyitErrorLogStatus;
-use Tallers\BharPhyit\Models\BharPhyitErrorLog;
+use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
+use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Throwable;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
     public function report(Throwable $exception)
     {
-        info('tesrting');
         if ($this->shouldReport($exception)) {
+            $this->storeBharPhyitErrorLog($exception);
         }
 
         parent::report($exception);
@@ -53,11 +53,11 @@ class BharPhyitHandler extends ExceptionsHandler
         }
 
         $unsolvedErrorLog->details()->create([
-            'payload' => $this->filterHidden($this->filterPayload(request()->all())),
+            'payload' => json_encode($this->filterHidden($this->filterPayload(request()->all()))),
             'user_id' => auth()->id(),
             'user_type' => auth()->user() instanceof Model ? auth()->user()::class : null,
-            'queries' => $this->queries,
-            'headers' => $this->filterHidden(request()->header()),
+            'queries' => json_encode($this->queries),
+            'headers' => json_encode($this->filterHidden(request()->header())),
         ]);
 
         $this->updateOccurence($unsolvedErrorLog);
@@ -66,7 +66,7 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function getUnresolveErrorLog(Throwable $throwable): BharPhyitErrorLog
     {
         $hash = $this->hashError($throwable);
-
+        
         $errorRecord = BharPhyitErrorLog::query()
             ->where('hash', $hash)
             ->whereIn('status', BharPhyitErrorLogStatus::unresolveStatuses())
@@ -76,14 +76,14 @@ class BharPhyitHandler extends ExceptionsHandler
             $errorRecord = BharPhyitErrorLog::create([
                 'hash' => $hash,
                 'title' => $throwable->getMessage(),
-                'body' => $throwable->getTrace(),
+                'body' => json_encode($throwable->getTrace()),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
-                'error_code_lines' => array_filter($this->getErrorCodeLines($throwable)),
+                'error_code_lines' => json_encode(array_filter($this->getErrorCodeLines($throwable))),
                 'method' => request()->method(),
                 'occurrences' => 0,
                 'status' => BharPhyitErrorLogStatus::UNREAD,
-                'additionals' => [],
+                'additionals' => json_encode([]),
                 'last_occurred_at' => null,
             ]);
         }
