@@ -26,25 +26,13 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
         'resolved_at' => 'datetime',
         'snooze_until' => 'datetime',
         'last_occurred_at' => 'datetime',
-        'body' => 'array',
-        'additionals' => 'array',
     ];
 
     /**
      * relations
      */
-    public function details(): HasMany
+    public function bharPhyitErrorLogDetails(): HasMany
     {
         return $this->hasMany(BharPhyitErrorLogDetail::class);
-    }
-
-    /**
-     * Check Error is snooze or not
-     * 
-     * @return bool
-     */
-    public function isSnoozed(): bool
-    {
-        return (bool) ($this->snooze_until && now()->lte($this->snooze_until));
     }
 }

@@ -3,12 +3,16 @@
 namespace Tallerrs\BharPhyit;
 
 use Illuminate\Support\ServiceProvider;
+use Tallerrs\BharPhyit\Exceptions\BharPhyitHandler;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Route;
 
 class  BharPhyitServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerResources();
@@ -18,10 +22,11 @@ class  BharPhyitServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(
-            \Illuminate\Contracts\Debug\ExceptionHandler::class,
-            \Tallerrs\BharPhyit\Exceptions\BharPhyitHandler::class
-        );
+        // $this->app->singleton(ErrorHandler::class, function ($app) {
+        //     return new ErrorHandler($app);
+        // });
+
+        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
     }
 
     protected function registerCommands(): void
