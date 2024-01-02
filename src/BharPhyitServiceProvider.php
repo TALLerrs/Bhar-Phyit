@@ -18,6 +18,7 @@ class  BharPhyitServiceProvider extends ServiceProvider
         $this->registerResources();
         $this->registerMigrations();
         $this->registerConfig();
+        // $this->registerStyleResource();
     }
 
     public function register()
@@ -45,6 +46,11 @@ class  BharPhyitServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bhar-phyit');
     }
+
+    // protected function registerStyleResource(): void
+    // {
+    //     $this->loadViewsFrom(__DIR__ . '/../resources/assets/css/app.css', 'bhar-phyit-style');
+    // }
 
     protected function registerMigrations(): void
     {
