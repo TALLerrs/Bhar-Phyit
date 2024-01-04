@@ -1,3 +1,4 @@
+@@ -1,48 +1,49 @@
 {
     "name": "tallerrs/bhar-phyit",
     "description": "Error Tracking and Debugging tool for laravel based project.",
@@ -7,6 +8,7 @@
         "illuminate/support": "^10.38",
         "php": "^8.2",
         "livewire/livewire": "dev-main"
+        "livewire/livewire": "^2.0"
     },
     "require-dev": {
         "pestphp/pest": "^2.28"
@@ -39,6 +41,7 @@
         }
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": false

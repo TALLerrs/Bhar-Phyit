@@ -1,6 +1,6 @@
 <?php
 
-namespace Tallers\BharPhyit\Enums;
+namespace Tallerrs\BharPhyit\Enums;
 
 enum BharPhyitErrorLogStatus: string
 {

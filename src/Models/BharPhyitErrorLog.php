@@ -31,8 +31,18 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
     /**
      * relations
      */
-    public function bharPhyitErrorLogDetails(): HasMany
+    public function details(): HasMany
     {
         return $this->hasMany(BharPhyitErrorLogDetail::class);
+    }
+
+    /**
+     * Check Error is snooze or not
+     * 
+     * @return bool
+     */
+    public function isSnoozed(): bool
+    {
+        return (bool) ($this->snooze_until && now()->lte($this->snooze_until));
     }
 }
