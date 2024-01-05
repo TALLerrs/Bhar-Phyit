@@ -5,19 +5,19 @@ namespace Tallerrs\BharPhyit;
 use Illuminate\Support\ServiceProvider;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Carbon;
 
 class  BharPhyitServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
+        // $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerResources();
         $this->registerMigrations();
         $this->registerConfig();
-        // $this->registerStyleResource();
+        $this->registerDateFormat();
     }
 
     public function register()
@@ -45,11 +45,6 @@ class  BharPhyitServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bhar-phyit');
     }
 
-    // protected function registerStyleResource(): void
-    // {
-    //     $this->loadViewsFrom(__DIR__ . '/../resources/assets/css/app.css', 'bhar-phyit-style');
-    // }
-
     protected function registerMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
@@ -60,5 +55,12 @@ class  BharPhyitServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/bhar-phyit.php' => config_path('bhar-phyit.php'),
         ]);
+    }
+
+    protected function registerDateFormat()
+    {
+        Carbon::macro('dtString', function () {
+            return $this->format('Y-m-d g:i A');
+        });
     }
 }

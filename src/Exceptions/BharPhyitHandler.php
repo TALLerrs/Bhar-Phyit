@@ -27,7 +27,7 @@ class BharPhyitHandler extends ExceptionsHandler
 
     protected function write(LogRecord $record): void
     {
-        if (! config('bhar-phyit.enabled')) {
+        if (!config('bhar-phyit.enabled')) {
             return;
         }
 
@@ -66,7 +66,7 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function getUnresolveErrorLog(Throwable $throwable): BharPhyitErrorLog
     {
         $hash = $this->hashError($throwable);
-        
+
         $errorRecord = BharPhyitErrorLog::query()
             ->where('hash', $hash)
             ->whereIn('status', BharPhyitErrorLogStatus::unresolveStatuses())
@@ -146,7 +146,7 @@ class BharPhyitHandler extends ExceptionsHandler
 
         $index = $currentLine - 1;
 
-        if (! array_key_exists($index, $fileLines)) {
+        if (!array_key_exists($index, $fileLines)) {
             return [];
         }
 
