@@ -11,7 +11,6 @@ class  BharPhyitServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerResources();

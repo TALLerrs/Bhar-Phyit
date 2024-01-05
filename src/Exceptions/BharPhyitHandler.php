@@ -23,6 +23,22 @@ class BharPhyitHandler extends ExceptionsHandler
         parent::report($exception);
     }
 
+    /**
+     * Determine if the exception should be reported.
+     *
+     * @param  \Throwable  $e
+     * 
+     * @return bool
+     */
+    public function shouldReport(Throwable $e)
+    {
+        if ((! config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
+            return false;
+        }
+
+        return parent::shouldReport($e);
+    }
+
     protected array $queries = [];
 
     protected function write(LogRecord $record): void
@@ -44,6 +60,13 @@ class BharPhyitHandler extends ExceptionsHandler
         }
     }
 
+    /**
+     * Store in the Bhar Pyit Table
+     * 
+     * @param \Throwable $throwable
+     * 
+     * @return void
+     */
     protected function storeBharPhyitErrorLog(Throwable $throwable): void
     {
         $unsolvedErrorLog = $this->getUnresolveErrorLog($throwable);
@@ -51,6 +74,8 @@ class BharPhyitHandler extends ExceptionsHandler
         if ($unsolvedErrorLog->isSnoozed()) {
             return;
         }
+
+        $this->queries = app()->make(QueryRecorder::class)->getQueries();
 
         $unsolvedErrorLog->details()->create([
             'payload' => json_encode($this->filterHidden($this->filterPayload(request()->all()))),
@@ -63,6 +88,13 @@ class BharPhyitHandler extends ExceptionsHandler
         $this->updateOccurence($unsolvedErrorLog);
     }
 
+    /**
+     * Get BharPhyitErrorLog
+     * 
+     * @param \Throwable $throwable
+     * 
+     * @return \Tallerrs\BharPhyit\Models\BharPhyitErrorLog
+     */
     protected function getUnresolveErrorLog(Throwable $throwable): BharPhyitErrorLog
     {
         $hash = $this->hashError($throwable);
@@ -91,11 +123,25 @@ class BharPhyitHandler extends ExceptionsHandler
         return $errorRecord;
     }
 
+    /**
+     * Generate Hashed String Base On $throwable
+     * 
+     * @param \Throwable $throwable
+     * 
+     * @return string
+     */
     protected function hashError(Throwable $throwable): string
     {
         return hash('sha256', $throwable->getMessage() . $throwable->getLine() . request()->getRequestUri() . request()->method());
     }
 
+    /**
+     * Update Occurence
+     * 
+     * @param \Tallerrs\BharPhyit\Models\BharPhyitErrorLog $errorRecord
+     * 
+     * @return bool
+     */
     protected function updateOccurence(BharPhyitErrorLog $errorRecord): bool
     {
         return $errorRecord->update([
@@ -104,6 +150,13 @@ class BharPhyitHandler extends ExceptionsHandler
         ]);
     }
 
+    /**
+     * Summary of getErrorCodeLines
+     * 
+     * @param \Throwable $throwable
+     * 
+     * @return array
+     */
     protected function getErrorCodeLines(Throwable $throwable): array
     {
         $errorCodeLines = [];
@@ -188,6 +241,14 @@ class BharPhyitHandler extends ExceptionsHandler
         return $value instanceof UploadedFile;
     }
 
+    /**
+     * 
+     * check error is include in config except
+     * 
+     * @param \Throwable $throwable
+     * @return bool
+     * 
+     */
     protected function isExceptException(Throwable $throwable): bool
     {
         return in_array(get_class($throwable), config('bhar-phyit.except', []));
