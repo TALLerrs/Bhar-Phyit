@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Carbon;
+use Livewire\Livewire;
+use Tallerrs\BharPhyit\Http\Livewire\Components\ThemeBtn;
 
 class  BharPhyitServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,8 @@ class  BharPhyitServiceProvider extends ServiceProvider
         $this->registerMigrations();
         $this->registerConfig();
         $this->registerDateFormat();
+
+        Livewire::component('theme-btn', ThemeBtn::class);
     }
 
     public function register()

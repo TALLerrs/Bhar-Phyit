@@ -14,6 +14,8 @@ use Throwable;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
+    protected array $queries = [];
+
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
@@ -32,14 +34,12 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     public function shouldReport(Throwable $e)
     {
-        if ((! config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
+        if ((!config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
             return false;
         }
 
         return parent::shouldReport($e);
     }
-
-    protected array $queries = [];
 
     protected function write(LogRecord $record): void
     {
