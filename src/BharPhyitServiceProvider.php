@@ -4,7 +4,6 @@ namespace Tallerrs\BharPhyit;
 
 use Illuminate\Support\ServiceProvider;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Route;
 
 class  BharPhyitServiceProvider extends ServiceProvider

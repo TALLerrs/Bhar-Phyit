@@ -2,18 +2,24 @@
 
 namespace Tallerrs\BharPhyit\Exceptions;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
-use Illuminate\Http\UploadedFile;
-use Monolog\Handler\AbstractProcessingHandler;
-use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
-use Monolog\LogRecord;
-use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
-use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
+use Tallerrs\BharPhyit\Notifications\SlackNotification;
 use Throwable;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\Model;
+use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
+use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
+use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
+    /**
+     * 
+     * 
+     * @var array
+     */
+    protected array $queries = [];
+
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
@@ -37,27 +43,6 @@ class BharPhyitHandler extends ExceptionsHandler
         }
 
         return parent::shouldReport($e);
-    }
-
-    protected array $queries = [];
-
-    protected function write(LogRecord $record): void
-    {
-        if (! config('bhar-phyit.enabled')) {
-            return;
-        }
-
-        $exception = data_get($record, 'context.exception');
-
-        if ($exception && $exception instanceof Throwable) {
-            if ($this->isExceptException($exception)) {
-                return;
-            }
-
-            $this->queries = app()->make(QueryRecorder::class)->getQueries();
-
-            $this->storeBharPhyitErrorLog($exception);
-        }
     }
 
     /**
@@ -86,6 +71,8 @@ class BharPhyitHandler extends ExceptionsHandler
         ]);
 
         $this->updateOccurence($unsolvedErrorLog);
+
+        $this->sendNotifications($unsolvedErrorLog);
     }
 
     /**
@@ -252,5 +239,10 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function isExceptException(Throwable $throwable): bool
     {
         return in_array(get_class($throwable), config('bhar-phyit.except', []));
+    }
+
+    protected function sendNotifications(BharPhyitErrorLog $bharPhyitErrorLog): void
+    {
+        (new \Tallerrs\BharPhyit\Notifications\ExceptionNotification())->to('slack')->send($bharPhyitErrorLog);
     }
 }
