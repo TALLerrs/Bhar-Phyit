@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="w-full mx-auto min-h-screen text-gray-950 dark:text-white">
+    <div class="w-full mx-auto text-gray-950 dark:text-white">
         <nav class="flex justify-between items-center bg-white dark:bg-[#18181B] p-5 border-b-[1px] dark:border-gray-800 border-gray-100">
             <div>
                 <h1>
@@ -55,7 +55,7 @@
                 <livewire:theme-btn />
             </div>
         </nav>
-        <section class="p-8 dark:bg-[#09090B] bg-[#FAFAFA]">
+        <section class="p-8 dark:bg-[#09090B] bg-[#FAFAFA] min-h-screen">
             <div class="grid md:grid-cols-12">
                 {{ $slot }}
             </div>

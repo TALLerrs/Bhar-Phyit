@@ -21,6 +21,9 @@ class  BharPhyitServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerDateFormat();
 
+        /**
+         * livewire component register
+         */
         Livewire::component('theme-btn', ThemeBtn::class);
     }
 

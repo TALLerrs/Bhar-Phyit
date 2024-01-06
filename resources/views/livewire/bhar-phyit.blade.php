@@ -8,7 +8,8 @@
         </a>
         @endforeach
     </div>
-    <div>
+
+    <div class="pt-5">
         {{ $bharPhyits->links() }}
     </div>
 </div>

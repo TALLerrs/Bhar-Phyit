@@ -20,7 +20,7 @@ class BharPhyit extends Component
             'bharPhyits' => BharPhyitErrorLog::query()
                 ->select('id', 'title', 'status', 'last_occurred_at', 'url', 'occurrences')
                 ->orderBy('last_occurred_at')
-                ->paginate(20),
+                ->paginate(10),
         ]);
     }
 }
