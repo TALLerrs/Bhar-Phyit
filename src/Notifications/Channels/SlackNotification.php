@@ -2,6 +2,7 @@
 
 namespace Tallerrs\BharPhyit\Notifications\Channels;
 
+use Illuminate\Support\Facades\Http;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Notifications\AbstractNotification;
 use Tallerrs\BharPhyit\Notifications\NotificationInterface;
@@ -13,11 +14,15 @@ class SlackNotification extends AbstractNotification
 
     public function sendNotifications(): void
     {
-        (new \GuzzleHttp\Client())
-            ->post(config('bhar-phyit.channels.slack.webhook_url'), 
-            [
-                'json' => $this->getFormattedMessage()
-            ]);
+        try {
+             (new \GuzzleHttp\Client())
+                ->post(config('bhar-phyit.channels.slack.webhook_url'), 
+                    [
+                        'json' => $this->getFormattedMessage()
+                    ]);
+        } catch(\Exception $e) {
+            abort(422, "Slack webhook is valid");
+        }
     }
 
     public function getFormattedMessage(): array
