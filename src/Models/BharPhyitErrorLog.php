@@ -8,6 +8,7 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
 {
     protected $fillable = [
         'hash',
+        'error_type',
         'title',
         'body',
         'url',

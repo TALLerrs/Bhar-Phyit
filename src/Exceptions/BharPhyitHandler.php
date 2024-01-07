@@ -107,6 +107,7 @@ class BharPhyitHandler extends ExceptionsHandler
         if (empty($errorRecord)) {
             $errorRecord = BharPhyitErrorLog::create([
                 'hash' => $hash,
+                'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
                 'body' => json_encode($throwable->getTrace()),
                 'url' => request()->fullUrl(),
