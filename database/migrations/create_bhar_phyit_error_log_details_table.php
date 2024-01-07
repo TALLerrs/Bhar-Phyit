@@ -17,7 +17,7 @@ return new class extends Migration
             $table->jsonb('payload');
             $table->jsonb('queries')->nullable();
             $table->jsonb('headers')->nullable();
-            $table->nullableUlidMorphs('user');
+            $table->string('user_id');
 
             $table->softDeletes();
             $table->timestamps();

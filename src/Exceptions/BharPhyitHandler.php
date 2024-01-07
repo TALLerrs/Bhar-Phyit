@@ -80,7 +80,6 @@ class BharPhyitHandler extends ExceptionsHandler
         $unsolvedErrorLog->details()->create([
             'payload' => json_encode($this->filterHidden($this->filterPayload(request()->all()))),
             'user_id' => auth()->id(),
-            'user_type' => auth()->user() instanceof Model ? auth()->user()::class : null,
             'queries' => json_encode($this->queries),
             'headers' => json_encode($this->filterHidden(request()->header())),
         ]);

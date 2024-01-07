@@ -2,6 +2,7 @@
 
 namespace Tallerrs\BharPhyit\Http\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -14,6 +15,7 @@ class BharPhyitDetail extends Component
     use CanAccessBharPhyit;
 
     public BharPhyitErrorLog $bharPhyitErrorLog;
+    public User $user;
 
     #[Title('Bhar Phyit Detail')]
     public function mount(string $id)
@@ -21,6 +23,8 @@ class BharPhyitDetail extends Component
         $this->authorizeAccess();
 
         $this->bharPhyitErrorLog = BharPhyitErrorLog::query()->with('detail')->findOrFail($id);
+
+        $this->user = $this->bharPhyitErrorLog->detail->user;
     }
 
     public function render()
