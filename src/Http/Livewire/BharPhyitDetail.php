@@ -5,16 +5,21 @@ namespace Tallerrs\BharPhyit\Http\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 
 #[Layout('bhar-phyit::components.layouts.app')]
 class BharPhyitDetail extends Component
 {
+    use CanAccessBharPhyit;
+
     public BharPhyitErrorLog $bharPhyitErrorLog;
 
     #[Title('Bhar Phyit Detail')]
     public function mount(string $id)
     {
+        $this->authorizeAccess();
+
         $this->bharPhyitErrorLog = BharPhyitErrorLog::query()->with('detail')->findOrFail($id);
     }
 
