@@ -20,4 +20,12 @@ class BharPhyitErrorLogDetail extends BharPhyitBaseModel
     {
         return $this->belongsTo(BharPhyitErrorLog::class);
     }
+
+    /**
+     * value retreive function
+     */
+    public function getHeaders()
+    {
+        return json_decode($this->headers);
+    }
 }

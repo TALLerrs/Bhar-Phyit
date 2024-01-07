@@ -2,29 +2,37 @@
 
 namespace Tallerrs\BharPhyit;
 
+use Livewire\Livewire;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Tallerrs\BharPhyit\Console\ClearBharPhyit;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Carbon;
-use Livewire\Livewire;
+use Tallerrs\BharPhyit\Console\InstallBharPhyit;
 use Tallerrs\BharPhyit\Http\Livewire\Components\ThemeBtn;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-class  BharPhyitServiceProvider extends ServiceProvider
+class BharPhyitServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         // $this->app->bind(ExceptionHandler::class, BharPhyitHandler::class);
-        $this->registerCommands();
         $this->registerRoutes();
         $this->registerResources();
         $this->registerMigrations();
         $this->registerConfig();
         $this->registerDateFormat();
+        $this->offerPublishing();
+        $this->registerCommands();
 
         /**
          * livewire component register
          */
         Livewire::component('theme-btn', ThemeBtn::class);
+
+        Blade::directive('formatSql', function ($expression) {
+            return "<?php echo \\Tallerrs\\BharPhyit\\BharPhyitServiceProvider::formatSql($expression); ?>";
+        });
     }
 
     public function register()
@@ -35,28 +43,46 @@ class  BharPhyitServiceProvider extends ServiceProvider
         );
     }
 
-    protected function registerCommands(): void
-    {
-        $this->commands([
-            ClearBharPhyit::class,
-        ]);
-    }
-
+    /**
+     * Register the BharPhyit routes.
+     *
+     * @return void
+     */
     protected function registerRoutes(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        Route::group([
+            // 'namespace' => 'Tallerrs\BharPhyit\Http\Controllers',
+            'middleware' => config('bhar-phyit.middleware', 'web'),
+        ], function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        });
     }
 
+    /**
+     * Register the BharPhyit resources.
+     *
+     * @return void
+     */
     protected function registerResources(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bhar-phyit');
     }
 
+    /**
+     * Register the BharPhyit migrations.
+     *
+     * @return void
+     */
     protected function registerMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 
+    /**
+     * Register the BharPhyit config.
+     *
+     * @return void
+     */
     protected function registerConfig(): void
     {
         $this->publishes([
@@ -64,10 +90,65 @@ class  BharPhyitServiceProvider extends ServiceProvider
         ]);
     }
 
+    /**
+     * Register the BharPhyit Carbon macro.
+     *
+     * @return void
+     */
     protected function registerDateFormat()
     {
         Carbon::macro('dtString', function () {
             return $this->format('Y-m-d g:i A');
         });
+    }
+
+    /**
+     * Setup the resource publishing groups for BharPhyit.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../stubs/BharPhyitServiceProvider.stub' => app_path('Providers/BharPhyitServiceProvider.php'),
+            ], 'bhar-phyit-provider');
+
+            $this->publishes([
+                __DIR__ . '/../config/bhar-phyit.php' => config_path('bhar-phyit.php'),
+            ], 'bhar-phyit-config');
+        }
+    }
+
+    /**
+     * Register the BharPhyit Artisan commands.
+     *
+     * @return void
+     */
+    protected function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ClearBharPhyit::class,
+                InstallBharPhyit::class,
+            ]);
+        }
+    }
+
+    /**
+     * Format SQL query for display.
+     *
+     * @param string $sql
+     * @return string
+     */
+    public static function formatSql($sql)
+    {
+        // Your logic to format the SQL query goes here
+        // You can use regular expressions, string manipulation, or any other method
+
+        // For example, you can add newlines and indentation for better readability
+        $formattedSql = preg_replace("/(\bINSERT\b|\bVALUES\b|\bINTO\b|\b\(\b|\b\)\b|\bUPDATE\b|\bSET\b)/", "\n$1", $sql);
+
+        return $formattedSql;
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('error_type');
             $table->text('title');
             $table->jsonb('body');
+            $table->text('sql')->nullable();
             $table->text('url');
             $table->string('method');
             $table->string('line');

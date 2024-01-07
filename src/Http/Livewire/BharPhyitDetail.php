@@ -15,7 +15,7 @@ class BharPhyitDetail extends Component
     #[Title('Bhar Phyit Detail')]
     public function mount(string $id)
     {
-        $this->bharPhyitErrorLog = BharPhyitErrorLog::findOrFail($id);
+        $this->bharPhyitErrorLog = BharPhyitErrorLog::query()->with('detail')->findOrFail($id);
     }
 
     public function render()

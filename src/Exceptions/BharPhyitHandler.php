@@ -110,6 +110,7 @@ class BharPhyitHandler extends ExceptionsHandler
                 'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
                 'body' => json_encode($throwable->getTrace()),
+                'sql' => $this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
                 'error_code_lines' => json_encode(array_filter($this->getErrorCodeLines($throwable))),
@@ -253,5 +254,22 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function isExceptException(Throwable $throwable): bool
     {
         return in_array(get_class($throwable), config('bhar-phyit.except', []));
+    }
+
+    /**
+     * to format sql and use it to show in Bhar Phyit Detail
+     * 
+     * @param \Throwable $throwable
+     * @return ?string
+     */
+    protected function formatSql(Throwable $throwable): ?string
+    {
+        $sql = $throwable->getSql();
+
+        // Get the actual values used in the query
+        $bindings = $throwable->getBindings();
+
+        // Combine SQL and values
+        return vsprintf(str_replace('?', "'%s'", $sql), $bindings);
     }
 }

@@ -9,8 +9,8 @@
 </head>
 
 <body>
-    <div class="w-full mx-auto text-gray-950 dark:text-white">
-        <nav class="flex justify-between items-center bg-white dark:bg-[#18181B] p-5 border-b-[1px] dark:border-gray-800 border-gray-100">
+    <div class="w-full mx-auto text-gray-950 dark:text-white relative">
+        <nav class="fixed top-0 start-0 z-50 w-full flex justify-between items-center bg-white dark:bg-[#18181B] p-5 border-b-[1px] dark:border-gray-800 border-gray-100">
             <div>
                 <h1>
                     <svg width="218.64248046875px" height="50px" xmlns="http://www.w3.org/2000/svg" viewBox="140.678759765625 42.8 218.64248046875 64.4" style="background: rgba(0, 0, 0, 0);" preserveAspectRatio="xMidYMid">
@@ -55,7 +55,7 @@
                 <livewire:theme-btn />
             </div>
         </nav>
-        <section class="p-8 dark:bg-[#09090B] bg-[#FAFAFA] min-h-screen">
+        <section class="p-8 relative top-20 dark:bg-[#09090B] bg-[#FAFAFA] min-h-screen">
             <div class="grid md:grid-cols-12">
                 {{ $slot }}
             </div>
