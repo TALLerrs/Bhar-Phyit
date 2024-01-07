@@ -14,13 +14,16 @@ class BharPhyitDetail extends Component
 {
     use CanAccessBharPhyit;
 
-    public BharPhyitErrorLog $bharPhyitErrorLog;
     public User $user;
+    public string $appName;
+    public BharPhyitErrorLog $bharPhyitErrorLog;
 
     #[Title('Bhar Phyit Detail')]
     public function mount(string $id)
     {
         $this->authorizeAccess();
+
+        $this->appName = config('app.name');
 
         $this->bharPhyitErrorLog = BharPhyitErrorLog::query()->with('detail')->findOrFail($id);
 

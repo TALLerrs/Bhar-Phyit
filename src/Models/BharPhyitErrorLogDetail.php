@@ -36,4 +36,14 @@ class BharPhyitErrorLogDetail extends BharPhyitBaseModel
     {
         return json_decode($this->headers);
     }
+
+    public function getPayload()
+    {
+        return $this->payload;
+    }
+
+    public function getQueries()
+    {
+        return json_decode($this->queries);
+    }
 }
