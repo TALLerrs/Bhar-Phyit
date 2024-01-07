@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('url');
             $table->string('method');
             $table->string('line');
+            $table->string('file_path');
             $table->jsonb('error_code_lines')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->string('status');

@@ -14,12 +14,19 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
 class BharPhyitHandler extends ExceptionsHandler
 {
     /**
-     * 
+     * Queries recorded during the exception handling.
      * 
      * @var array
      */
     protected array $queries = [];
 
+    /**
+     * Report the exception and store it in the BharPhyit error log.
+     *
+     * @param \Throwable $exception The exception to be reported.
+     *
+     * @return void
+     */
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
@@ -46,9 +53,9 @@ class BharPhyitHandler extends ExceptionsHandler
     }
 
     /**
-     * Store in the Bhar Pyit Table
+     * Store the exception in the BharPhyit error log.
      * 
-     * @param \Throwable $throwable
+     * @param \Throwable $throwable The exception to be stored.
      * 
      * @return void
      */
@@ -98,6 +105,7 @@ class BharPhyitHandler extends ExceptionsHandler
                 'body' => json_encode($throwable->getTrace()),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
+                'file_path' => $throwable->getFile(),
                 'error_code_lines' => json_encode(array_filter($this->getErrorCodeLines($throwable))),
                 'method' => request()->method(),
                 'occurrences' => 0,
@@ -241,8 +249,27 @@ class BharPhyitHandler extends ExceptionsHandler
         return in_array(get_class($throwable), config('bhar-phyit.except', []));
     }
 
+    /**
+     * Send notifications for the given BharPhyit error log.
+     *
+     * @param BharPhyitErrorLog $bharPhyitErrorLog The error log to send notifications for.
+     *
+     * @return void
+     */
     protected function sendNotifications(BharPhyitErrorLog $bharPhyitErrorLog): void
     {
-        (new \Tallerrs\BharPhyit\Notifications\ExceptionNotification())->to('slack')->send($bharPhyitErrorLog);
+        (new \Tallerrs\BharPhyit\Notifications\ExceptionNotification())
+            ->to($this->enableReportChannels())
+            ->send($bharPhyitErrorLog);
+    }
+
+      /**
+     * Get the list of enabled report channels.
+     *
+     * @return array The list of enabled report channels.
+     */
+    protected function enableReportChannels(): array
+    {
+        return collect(config('bhar-phyit.channels'))->where('enabled',true)->keys()->toArray();
     }
 }
