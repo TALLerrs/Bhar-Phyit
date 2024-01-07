@@ -259,7 +259,7 @@
     <div class="col-span-full space-y-5">
         <div class="relative flex flex-col gap-4 space-y-3 justify-start text-sm px-7 py-5 dark:bg-[#18181B]/40 bg-white shadow-md dark:ring-white/10 rounded-xl">
             <div class="absolute top-[-10px] left-1/2 px-3 py-2 z-10 bg-indigo-500 rounded-full text-[12px]">
-                <span class="p-1 rounded-full bg-gray-900/20">10</span>
+                <span class="p-1 rounded-full bg-gray-900/20">{{ count($bharPhyitErrorLog->detail->getQueries()) }}</span>
                 <span>QUERIES</span>
             </div>
             @foreach ($bharPhyitErrorLog->detail->getQueries() as $query)
