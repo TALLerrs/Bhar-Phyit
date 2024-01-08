@@ -27,7 +27,7 @@ return [
             'webhook_url' => env('ERROR_TRACKING_MAIL_WEBHOOK_URL',null),
         ],
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | BharPhyit Route Middleware
