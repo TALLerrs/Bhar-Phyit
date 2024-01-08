@@ -27,6 +27,7 @@ class BharPhyitHandler extends ExceptionsHandler
      *
      * @return void
      */
+
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
@@ -45,13 +46,13 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     public function shouldReport(Throwable $e)
     {
-        if ((! config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
+        if ((!config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
             return false;
         }
 
         return parent::shouldReport($e);
     }
-
+    
     /**
      * Store the exception in the BharPhyit error log.
      * 
@@ -72,7 +73,6 @@ class BharPhyitHandler extends ExceptionsHandler
         $unsolvedErrorLog->details()->create([
             'payload' => json_encode($this->filterHidden($this->filterPayload(request()->all()))),
             'user_id' => auth()->id(),
-            'user_type' => auth()->user() instanceof Model ? auth()->user()::class : null,
             'queries' => json_encode($this->queries),
             'headers' => json_encode($this->filterHidden(request()->header())),
         ]);
@@ -92,7 +92,7 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function getUnresolveErrorLog(Throwable $throwable): BharPhyitErrorLog
     {
         $hash = $this->hashError($throwable);
-        
+
         $errorRecord = BharPhyitErrorLog::query()
             ->where('hash', $hash)
             ->whereIn('status', BharPhyitErrorLogStatus::unresolveStatuses())
@@ -101,8 +101,10 @@ class BharPhyitHandler extends ExceptionsHandler
         if (empty($errorRecord)) {
             $errorRecord = BharPhyitErrorLog::create([
                 'hash' => $hash,
+                'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
                 'body' => json_encode($throwable->getTrace()),
+                'sql' => $this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
                 'file_path' => $throwable->getFile(),
@@ -194,7 +196,7 @@ class BharPhyitHandler extends ExceptionsHandler
 
         $index = $currentLine - 1;
 
-        if (! array_key_exists($index, $fileLines)) {
+        if (!array_key_exists($index, $fileLines)) {
             return [];
         }
 
@@ -271,5 +273,22 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function enableReportChannels(): array
     {
         return collect(config('bhar-phyit.channels'))->where('enabled',true)->keys()->toArray();
+    }
+
+    /**
+     * to format sql and use it to show in Bhar Phyit Detail
+     * 
+     * @param \Throwable $throwable
+     * @return ?string
+     */
+    protected function formatSql(Throwable $throwable): ?string
+    {
+        $sql = $throwable->getSql();
+
+        // Get the actual values used in the query
+        $bindings = $throwable->getBindings();
+
+        // Combine SQL and values
+        return vsprintf(str_replace('?', "'%s'", $sql), $bindings);
     }
 }

@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('bhar_phyit_error_logs', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('hash')->index();
+            $table->string('error_type');
             $table->text('title');
             $table->jsonb('body');
+            $table->text('sql')->nullable();
             $table->text('url');
             $table->string('method');
             $table->string('line');

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 return [
     'url' => env('BHAR_PHYIT_URL', 'bhar-phyit'),
 
@@ -25,4 +27,17 @@ return [
             'webhook_url' => env('ERROR_TRACKING_MAIL_WEBHOOK_URL',null),
         ],
     ],
+    
+    /*
+    |--------------------------------------------------------------------------
+    | BharPhyit Route Middleware
+    |--------------------------------------------------------------------------
+    |
+    | These middleware will get attached onto each BharPhyit route, giving you
+    | the chance to add your own middleware to this list or change any of
+    | the existing middleware. Or, you can simply stick with this list.
+    |
+    */
+
+    'middleware' => ['web'],
 ];

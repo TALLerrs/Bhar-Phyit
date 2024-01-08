@@ -2,6 +2,7 @@
 
 namespace Tallerrs\BharPhyit\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BharPhyitErrorLogDetail extends BharPhyitBaseModel
@@ -11,6 +12,8 @@ class BharPhyitErrorLogDetail extends BharPhyitBaseModel
         'payload',
         'queries',
         'headers',
+        'user_type',
+        'user_id'
     ];
 
     /**
@@ -19,5 +22,18 @@ class BharPhyitErrorLogDetail extends BharPhyitBaseModel
     public function bharPhyitErrorLog(): BelongsTo
     {
         return $this->belongsTo(BharPhyitErrorLog::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * value retreive function
+     */
+    public function getHeaders()
+    {
+        return json_decode($this->headers);
     }
 }
