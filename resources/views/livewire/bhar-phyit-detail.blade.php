@@ -18,7 +18,7 @@
             {{ $bharPhyitErrorLog->getTitle() }}
         </div>
         <div aria-label="sql" class="dark:bg-gray-200/5 bg-[#FAFAFA] px-5 py-3 cursor-pointer">
-            @formatSql($bharPhyitErrorLog->getSql())
+            <pre style="white-space: pre-wrap;font-family:monospace;">{!! htmlentities($bharPhyitErrorLog->getSql()) !!}</pre>
         </div>
     </div>
 
@@ -217,11 +217,9 @@
             <div class="dark:bg-gray-200/5 group py-2 px-5 relative my-5">
                 <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x space-y-2">
                     <div class="made-fade-x">
-                        <pre class="pl-4 overflow-x-scroll scrollbar-hidden-x pr-12">
-                            <code class="font-mono leading-relaxed text-sm font-normal">
-                                {{ $bharPhyitErrorLog->detail->payload }}
-                            </code>
-                        </pre>
+                        <code class="font-mono leading-relaxed text-sm font-normal">
+                            <pre>{!! json_encode(json_decode($bharPhyitErrorLog->detail->payload), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}</pre>
+                        </code>
                     </div>
                 </div>
             </div>
@@ -242,14 +240,8 @@
                 </div>
                 <div class="dark:bg-gray-200/5 group py-2 px-5 relative">
                     <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x space-y-2">
-                        <code>
-                            <span>{</span>
-                            @foreach ($user->attributesToArray() as $column => $value)
-                            <div class="pl-5">
-                                "{{ $column }}": {{ $value }}
-                            </div>
-                            @endforeach
-                            }
+                        <code class="font-mono leading-relaxed text-sm font-normal">
+                            <pre>{!! json_encode(json_decode($user->toJson()), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}</pre>
                         </code>
                     </div>
                 </div>
