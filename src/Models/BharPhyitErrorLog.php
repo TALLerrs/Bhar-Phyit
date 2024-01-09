@@ -100,7 +100,7 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
 
     public function getResolvedAt(): string
     {
-        return $this->resolved_at->dtString();
+        return $this?->resolved_at?->dtString();
     }
 
     public function getStatus(): string
