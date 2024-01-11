@@ -4,6 +4,7 @@ namespace Tallerrs\BharPhyit\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use Tallerrs\BharPhyit\Exceptions\ForbiddenException;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Notifications\Channels\MailNotification;
 use Tallerrs\BharPhyit\Notifications\Channels\SlackNotification;
@@ -50,7 +51,7 @@ class ExceptionNotification
                     $this->notifications[] = MailNotification::class;
                     break;
                 default:
-                    throw new \RuntimeException("Notification class '$channel' not found.",500);
+                    throw ForbiddenException::make("Notification class '$channel' not found");
                 // Add more cases for other notification channels if needed
             }
         }
@@ -72,7 +73,7 @@ class ExceptionNotification
             if (class_exists($notification)) {
                 (new $notification($bharPhyitErrorLog))->sendNotifications();
             } else {
-                throw new \RuntimeException("Notification class '$notification' not found.",500);
+                throw ForbiddenException::make("Notification class '$notification' not found.");
             }
         }
     }
