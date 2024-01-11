@@ -15,6 +15,7 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
         'sql',
         'url',
         'method',
+        'file_path',
         'line',
         'error_code_lines',
         'resolved_at',
