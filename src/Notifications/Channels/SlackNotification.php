@@ -2,10 +2,7 @@
 
 namespace Tallerrs\BharPhyit\Notifications\Channels;
 
-use Illuminate\Support\Facades\Http;
-use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Notifications\AbstractNotification;
-use Tallerrs\BharPhyit\Notifications\NotificationInterface;
 use Tallerrs\BharPhyit\Trait\BharPhyitUrl;
 
 class SlackNotification extends AbstractNotification
@@ -21,7 +18,11 @@ class SlackNotification extends AbstractNotification
                         'json' => $this->getFormattedMessage()
                     ]);
         } catch(\Exception $e) {
-            abort(422, "Slack webhook is valid");
+            // Log the exception for debugging purposes
+            logger()->error('Failed to send Slack notification: ' . $e->getMessage());
+
+            // Rethrow the exception for the caller to handle appropriately
+            throw new \RuntimeException('Failed to send Slack notification', 0, $e);
         }
     }
 
