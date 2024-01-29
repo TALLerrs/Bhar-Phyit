@@ -37,7 +37,7 @@ class ExceptionNotification
      * 
      * @throws \RuntimeException If the provided notification channel class is not found.
      */
-    public function to(array $notificationChannels): self
+    public function setNotificationChannels(array $notificationChannels): self
     {
         foreach ($notificationChannels as $channel) {
             switch ($channel) {
@@ -51,7 +51,7 @@ class ExceptionNotification
                     $this->notifications[] = MailNotification::class;
                     break;
                 default:
-                    throw ForbiddenException::make("Notification class '$channel' not found");
+                    throw new \RuntimeException("Notification class ".$channel." not found");
                 // Add more cases for other notification channels if needed
             }
         }
@@ -65,15 +65,17 @@ class ExceptionNotification
      *
      * @param BharPhyitErrorLog $bharPhyitErrorLog The error log to be notified.
      * 
+     * @return void
+     * 
      * @throws \RuntimeException If the notification class is not found.
      */
-    public function send(BharPhyitErrorLog $bharPhyitErrorLog)
-    {    
-        foreach($this->notifications as $notification) {
-            if (class_exists($notification)) {
+     public function send(BharPhyitErrorLog $bharPhyitErrorLog): void
+    {        
+        foreach ($this->notifications as $notification) {
+            try {
                 (new $notification($bharPhyitErrorLog))->sendNotifications();
-            } else {
-                throw ForbiddenException::make("Notification class '$notification' not found.");
+            } catch (\Exception $e) {
+                error_log("Failed to send notification: " . $e->getMessage());
             }
         }
     }

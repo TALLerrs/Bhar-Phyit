@@ -1,11 +1,9 @@
 <?php
 
-namespace Tallerrs\BharPhyit\Hanlder;
+namespace Tallerrs\BharPhyit\Handler;
 
-use Tallerrs\BharPhyit\Notifications\SlackNotification;
 use Throwable;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Database\Eloquent\Model;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
@@ -27,7 +25,6 @@ class BharPhyitHandler extends ExceptionsHandler
      *
      * @return void
      */
-
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
@@ -261,7 +258,7 @@ class BharPhyitHandler extends ExceptionsHandler
     protected function sendNotifications(BharPhyitErrorLog $bharPhyitErrorLog): void
     {
         (new \Tallerrs\BharPhyit\Notifications\ExceptionNotification())
-            ->to($this->enableReportChannels())
+            ->setNotificationChannels($this->enableReportChannels())
             ->send($bharPhyitErrorLog);
     }
 
@@ -283,7 +280,6 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     protected function formatSql(Throwable $throwable): ?string
     {
-        return "dd";
         $sql = $throwable->getSql();
 
         // Get the actual values used in the query
