@@ -8,6 +8,7 @@ use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
+use Illuminate\Support\Facades\Cache;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
@@ -43,11 +44,15 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     public function shouldReport(Throwable $e)
     {
-        if ((!config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
+        if (((!config('bhar-phyit.enabled')) && $this->isExceptException($e))) {
             return false;
-        }
+        } else {
+            $hash = $this->hashError($e);
 
-        return parent::shouldReport($e);
+            $lock = Cache::lock($hash, 30);
+
+            return $lock->get();
+        }
     }
     
     /**
@@ -59,7 +64,9 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     protected function storeBharPhyitErrorLog(Throwable $throwable): void
     {
-        $unsolvedErrorLog = $this->getUnresolveErrorLog($throwable);
+        $hash = $this->hashError($throwable);
+
+        $unsolvedErrorLog = $this->getUnresolveErrorLog($throwable, $hash);
 
         if ($unsolvedErrorLog->isSnoozed()) {
             return;
@@ -83,13 +90,12 @@ class BharPhyitHandler extends ExceptionsHandler
      * Get BharPhyitErrorLog
      * 
      * @param \Throwable $throwable
+     * @param string $hash
      * 
      * @return \Tallerrs\BharPhyit\Models\BharPhyitErrorLog
      */
-    protected function getUnresolveErrorLog(Throwable $throwable): BharPhyitErrorLog
+    protected function getUnresolveErrorLog(Throwable $throwable, string $hash): BharPhyitErrorLog
     {
-        $hash = $this->hashError($throwable);
-
         $errorRecord = BharPhyitErrorLog::query()
             ->where('hash', $hash)
             ->whereIn('status', BharPhyitErrorLogStatus::unresolveStatuses())
