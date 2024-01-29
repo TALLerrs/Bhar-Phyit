@@ -1,6 +1,6 @@
 <?php
 
-namespace Tallerrs\BharPhyit\Exceptions;
+namespace Tallerrs\BharPhyit\Hanlder;
 
 use Tallerrs\BharPhyit\Notifications\SlackNotification;
 use Throwable;
@@ -104,7 +104,7 @@ class BharPhyitHandler extends ExceptionsHandler
                 'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
                 'body' => json_encode($throwable->getTrace()),
-                'sql' => $this->formatSql($throwable),
+                'sql' => 1,//$this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
                 'file_path' => $throwable->getFile(),
@@ -283,6 +283,7 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     protected function formatSql(Throwable $throwable): ?string
     {
+        return "dd";
         $sql = $throwable->getSql();
 
         // Get the actual values used in the query

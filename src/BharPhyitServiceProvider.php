@@ -38,7 +38,7 @@ class BharPhyitServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             \Illuminate\Contracts\Debug\ExceptionHandler::class,
-            \Tallerrs\BharPhyit\Exceptions\BharPhyitHandler::class
+            \Tallerrs\BharPhyit\Hanlder\BharPhyitHandler::class
         );
     }
 
