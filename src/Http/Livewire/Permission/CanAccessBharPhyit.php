@@ -6,6 +6,6 @@ trait CanAccessBharPhyit
 {
     public function authorizeAccess(): void
     {
-        abort_if(!auth()->user(), 403);
+        // abort_if(!auth()->user(), 403);
     }
 }

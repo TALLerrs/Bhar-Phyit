@@ -9,14 +9,14 @@ use Livewire\Attributes\Title;
 use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 
-#[Layout('bhar-phyit::components.layouts.app')]
+#[Layout('bhar-phyit::dashboard')]
 class BharPhyitDetail extends Component
 {
     use CanAccessBharPhyit;
 
-    public User $user;
+    public ?User $user;
     public string $appName;
-    public BharPhyitErrorLog $bharPhyitErrorLog;
+    public $bharPhyitErrorLog;
 
     #[Title('Bhar Phyit Detail')]
     public function mount(string $id)

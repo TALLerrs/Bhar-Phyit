@@ -1,4 +1,4 @@
-<div class="col-span-full space-y-5">
+<div class="col-span-full space-y-5 p-10">
     <div class="flex flex-col gap-4 justify-start text-sm px-7 py-5 dark:bg-[#18181B] bg-white shadow-md ring-1 ring-gray-950/5 dark:ring-white/10 rounded-xl">
         <div aria-label="error type" class="text-base px-3 flex justify-between">
             <div>{{ $bharPhyitErrorLog->getErrorType() }}</div>
@@ -224,29 +224,31 @@
                 </div>
             </div>
         </div>
-        <div class="pb-5">
-            <h1 class="text-lg font-medium text-indigo-500 flex items-center gap-2">
-                <span>User</span>
-                <span>
-                    <svg class="w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path fill="currentColor" d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>
-                    </svg>
-                </span>
-            </h1>
-            <div>
-                <div class="my-5">
-                    <h2 class="text-base font-medium">{{ $user?->name }}</h2>
-                    <p>{{ $user?->email }}</p>
-                </div>
-                <div class="dark:bg-gray-200/5 group py-2 px-5 relative">
-                    <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x space-y-2">
-                        <code class="font-mono leading-relaxed text-sm font-normal">
-                            <pre>{!! json_encode(json_decode($user->toJson()), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}</pre>
-                        </code>
+        @if($user)
+            <div class="pb-5">
+                <h1 class="text-lg font-medium text-indigo-500 flex items-center gap-2">
+                    <span>User</span>
+                    <span>
+                        <svg class="w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-fw " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>
+                        </svg>
+                    </span>
+                </h1>
+                    <div>
+                        <div class="my-5">
+                            <h2 class="text-base font-medium">{{ $user?->name }}</h2>
+                            <p>{{ $user?->email }}</p>
+                        </div>
+                        <div class="dark:bg-gray-200/5 group py-2 px-5 relative">
+                            <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x space-y-2">
+                                <code class="font-mono leading-relaxed text-sm font-normal">
+                                    <pre>{!! json_encode(json_decode($user?->toJson()), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}</pre>
+                                </code>
+                            </div>
+                        </div>
                     </div>
-                </div>
             </div>
-        </div>
+        @endif
     </div>
     <div class="col-span-full space-y-5">
         <div class="relative flex flex-col gap-4 space-y-3 justify-start text-sm px-7 py-5 dark:bg-[#18181B]/40 bg-white shadow-md dark:ring-white/10 rounded-xl">

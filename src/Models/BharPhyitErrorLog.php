@@ -75,7 +75,7 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
 
     public function getSql(): string
     {
-        return $this->sql;
+        return $this->sql ?? "";
     }
 
     public function getUrl(): string

@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 
-#[Layout('bhar-phyit::components.layouts.app')]
+#[Layout('bhar-phyit::dashboard')]
 class BharPhyit extends Component
 {
     use WithPagination;

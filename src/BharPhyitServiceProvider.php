@@ -11,6 +11,7 @@ use Tallerrs\BharPhyit\Console\ClearBharPhyit;
 use Tallerrs\BharPhyit\Console\InstallBharPhyit;
 use Tallerrs\BharPhyit\Http\Livewire\Components\ThemeBtn;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class BharPhyitServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,11 @@ class BharPhyitServiceProvider extends ServiceProvider
             \Illuminate\Contracts\Debug\ExceptionHandler::class,
             \Tallerrs\BharPhyit\Handler\BharPhyitHandler::class
         );
+
+        $this->callAfterResolving('blade.compiler', function (BladeCompiler $blade) {
+            $blade->anonymousComponentPath(__DIR__.'/../resources/views/components/layouts', 'bhar-phyit-layout');
+            $blade->anonymousComponentPath(__DIR__.'/../resources/views/components', 'bhar-phyit');
+        });
     }
 
     /**
