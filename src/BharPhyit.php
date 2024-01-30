@@ -137,7 +137,7 @@ class BharPhyit
                 return $carry.Str::finish($css->toHtml(), PHP_EOL);
             } else {
                 if (($contents = @file_get_contents($css)) === false) {
-                    throw new \RuntimeException("Unable to load Pulse dashboard CSS path [$css].");
+                    throw new \RuntimeException("Unable to load CSS path [$css].");
                 }
 
                 return $carry."<style>{$contents}</style>".PHP_EOL;
