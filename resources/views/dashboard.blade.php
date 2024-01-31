@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Page Title' }}</title>
     
-    {!! (new Tallerrs\BharPhyit\BharPhyit())->css() !!}
+    {!! Tallerrs\BharPhyit\Facades\BharPhyit::css() !!}
     @livewireStyles
 
-    {!! (new Tallerrs\BharPhyit\BharPhyit())->js() !!}
+    {!! Tallerrs\BharPhyit\Facades\BharPhyit::js() !!}
     @livewireScriptConfig
 </head>
 

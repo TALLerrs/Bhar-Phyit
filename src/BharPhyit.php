@@ -58,7 +58,7 @@ class BharPhyit
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    public static function check($request)
+    public function check($request)
     {
         return (static::$authUsing ?: function () {
             return app()->environment('local');

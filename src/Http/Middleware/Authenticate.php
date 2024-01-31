@@ -2,7 +2,7 @@
 
 namespace Tallerrs\BharPhyit\Http\Middleware;
 
-use Tallerrs\BharPhyit\BharPhyit;
+use Tallerrs\BharPhyit\Facades\BharPhyit;
 use Tallerrs\BharPhyit\Exceptions\ForbiddenException;
 
 class Authenticate
