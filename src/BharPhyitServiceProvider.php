@@ -44,6 +44,7 @@ class BharPhyitServiceProvider extends ServiceProvider
 
         $this->callAfterResolving('blade.compiler', function (BladeCompiler $blade) {
             $blade->anonymousComponentPath(__DIR__.'/../resources/views/components/layouts', 'bhar-phyit-layout');
+            $blade->anonymousComponentPath(__DIR__.'/../resources/views/components/icons', 'bhar-phyit-icon');
             $blade->anonymousComponentPath(__DIR__.'/../resources/views/components', 'bhar-phyit');
         });
     }
