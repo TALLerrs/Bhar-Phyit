@@ -44,6 +44,16 @@ class BharPhyitErrorLogDetail extends BharPhyitBaseModel
 
     public function getQueries()
     {
-        return json_decode($this->queries);
+        $queries = json_decode($this->queries);
+
+        foreach($queries as $query) {
+            $sql = $query->sql;
+            foreach($query->bindings as $binding) {
+                $sql = preg_replace('/\?/', "'$binding'", $sql, 1);
+            }
+            $query->sql = $sql;
+        }
+
+        return $queries;
     }
 }

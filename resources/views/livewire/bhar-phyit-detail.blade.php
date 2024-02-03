@@ -256,7 +256,9 @@
                 </div>
                 <div class="dark:bg-gray-800/20 group py-2 px-5 relative">
                     <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x">
-                        <code class="leading-relaxed text-sm font-normal">{{ $query->sql }}</code>
+                        <code class="leading-relaxed text-sm font-normal">
+                            {{ $query->sql }}
+                        </code>
                     </div>
                     <div class="absolute top-2 right-3">
                         <button type="button" class="w-4 h-4 rounded-full flex items-center justify-center text-xs text-indigo-500 hover:~text-indigo-600  transition-animation shadow-md hover:shadow-lg active:shadow-sm active:translate-y-px&quot; opacity-0 transform scale-80 transition-animation delay-100 group-hover:opacity-100 group-hover:scale-100" title="Copy to clipboard">
