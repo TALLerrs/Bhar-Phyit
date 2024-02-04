@@ -110,7 +110,7 @@ class BharPhyitHandler extends ExceptionsHandler
                 'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
                 'body' => json_encode($throwable->getTrace()),
-                'sql' => 1,//$this->formatSql($throwable),
+                'sql' => $this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
                 'file_path' => $throwable->getFile(),
@@ -289,13 +289,16 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     protected function formatSql(Throwable $throwable): ?string
     {
-        $sql = $throwable->getSql();
-
-        // Get the actual values used in the query
-        $bindings = $throwable->getBindings();
-
-        // Combine SQL and values
-        return vsprintf(str_replace('?', "'%s'", $sql), $bindings);
+        if($throwable instanceof \Illuminate\Database\QueryException) {
+            $sql = $throwable->getSql();
+    
+            // Get the actual values used in the query
+            $bindings = $throwable->getBindings();
+    
+            // Combine SQL and values
+            return vsprintf(str_replace('?', "'%s'", $sql), $bindings);
+        }
+        return null;
     }
 
     protected function getSnippet($backTrackFrame): ?array
