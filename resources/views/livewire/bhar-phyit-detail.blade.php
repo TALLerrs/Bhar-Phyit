@@ -1,3 +1,4 @@
+@dd(json_decode($bharPhyitErrorLog->body))
 <div class="col-span-full space-y-5 p-10">
     <div class="flex flex-col gap-4 justify-start text-sm px-7 py-5 dark:bg-[#18181B] bg-white shadow-md ring-1 ring-gray-950/5 dark:ring-white/10 rounded-xl">
         <div aria-label="error type" class="text-base px-3 flex justify-between">
@@ -247,7 +248,7 @@
                     </div>
                     <div class="px-2 py-1 border-[1px] rounded-md border-gray-500/30 flex gap-2 items-center">
                         <span>
-                            <x-bhar-phyit-icon::clock />
+                            <x-bhar-phyit-icon::database />
                         </span>
                         <span>
                             {{ str($query->connection_name)->upper() }}
