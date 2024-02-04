@@ -60,7 +60,7 @@
                                 @foreach($bharPhyitErrorLog->getErrorCodeLine() as $code)
                                     <div class="flex {{ $code->is_error_line ? "text-red-900 bg-slate-300" : "" }}">
                                         <span class="mr-5">{{ $code->line_number }}</span>
-                                        <pre>{!! $code->code !!}</pre>
+                                        <pre>{{ $code->code }}</pre>
                                     </div>
                                 @endforeach
                             </code>

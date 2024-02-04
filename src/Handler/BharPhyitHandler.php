@@ -49,6 +49,7 @@ class BharPhyitHandler extends ExceptionsHandler
         if (((!config('bhar-phyit.enabled')) && $this->isExceptException($e))) {
             return false;
         } else {
+            return true;
             $hash = $this->hashError($e);
 
             $lock = Cache::lock($hash, 30);
@@ -108,7 +109,7 @@ class BharPhyitHandler extends ExceptionsHandler
                 'hash' => $hash,
                 'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
-                'body' => $throwable->getTraceAsString(),
+                'body' => json_encode($throwable->getTrace()),
                 'sql' => 1,//$this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
@@ -205,16 +206,11 @@ class BharPhyitHandler extends ExceptionsHandler
             return [];
         }
 
-        $isErrorLine = (bool) ($beforeError ? ($currentLine == $errorLine) : false);
-
         return [
-            $currentLine => $fileLines[$index].$isErrorLine ? "❌❌" : "",
-        ]; 
-        // return [
-        //     'line_number' => $currentLine,
-        //     'code' => $fileLines[$index],
-        //     'is_error_line' => (bool) ($beforeError ? ($currentLine == $errorLine) : false),
-        // ];
+            'line_number' => $currentLine,
+            'code' => $fileLines[$index],
+            'is_error_line' => (bool) ($beforeError ? ($currentLine == $errorLine) : false),
+        ];
     }
 
     protected function filterHidden(array $payload = []): array
