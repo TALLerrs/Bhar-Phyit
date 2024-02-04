@@ -93,9 +93,9 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
         return $this->line;
     }
 
-    public function getErrorCodeLine(): string
+    public function getErrorCodeLine(): array
     {
-        return $this->error_code_lines;
+        return json_decode($this->error_code_lines);
     }
 
     public function getResolvedAt(): string

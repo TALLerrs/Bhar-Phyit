@@ -9,6 +9,8 @@ use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
 use Illuminate\Support\Facades\Cache;
+use Spatie\Backtrace\Backtrace;
+use Tallerrs\BharPhyit\Properties\BharPhyitErrorProperties;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
@@ -106,12 +108,12 @@ class BharPhyitHandler extends ExceptionsHandler
                 'hash' => $hash,
                 'error_type' => get_class($throwable),
                 'title' => $throwable->getMessage(),
-                'body' => json_encode($throwable->getTrace()),
+                'body' => $throwable->getTraceAsString(),
                 'sql' => 1,//$this->formatSql($throwable),
                 'url' => request()->fullUrl(),
                 'line' => $throwable->getLine(),
                 'file_path' => $throwable->getFile(),
-                'error_code_lines' => json_encode(array_filter($this->getErrorCodeLines($throwable))),
+                'error_code_lines' => json_encode($this->getErrorCodeLines($throwable)),
                 'method' => request()->method(),
                 'occurrences' => 0,
                 'status' => BharPhyitErrorLogStatus::UNREAD,
@@ -190,7 +192,7 @@ class BharPhyitHandler extends ExceptionsHandler
             $errorCodeLines[] = $this->getLineInfo($fileLines, $errorLine, $i, false);
         }
 
-        return $errorCodeLines;
+        return array_filter($errorCodeLines);
     }
 
     protected function getLineInfo(array $fileLines, int $errorLine, $i, bool $beforeError = true): array
@@ -203,11 +205,16 @@ class BharPhyitHandler extends ExceptionsHandler
             return [];
         }
 
+        $isErrorLine = (bool) ($beforeError ? ($currentLine == $errorLine) : false);
+
         return [
-            'line_number' => $currentLine,
-            'code' => $fileLines[$index],
-            'is_error_line' => (bool) ($beforeError ? ($currentLine == $errorLine) : false),
-        ];
+            $currentLine => $fileLines[$index].$isErrorLine ? "❌❌" : "",
+        ]; 
+        // return [
+        //     'line_number' => $currentLine,
+        //     'code' => $fileLines[$index],
+        //     'is_error_line' => (bool) ($beforeError ? ($currentLine == $errorLine) : false),
+        // ];
     }
 
     protected function filterHidden(array $payload = []): array
@@ -293,5 +300,19 @@ class BharPhyitHandler extends ExceptionsHandler
 
         // Combine SQL and values
         return vsprintf(str_replace('?', "'%s'", $sql), $bindings);
+    }
+
+    protected function getSnippet($backTrackFrame): ?array
+    {
+        $snippets = $backTrackFrame->getSnippet(20);
+
+        return collect($snippets)->map(function ($line, $number) use ($backTrackFrame) {
+                $formattedLine = $number.' '.$line;
+                if ($number == $backTrackFrame->lineNumber) {
+                    $formattedLine = $formattedLine.' ❌❌';
+                }
+
+                return $formattedLine;
+            })->toArray();
     }
 }
