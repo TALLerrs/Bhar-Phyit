@@ -5,6 +5,7 @@ namespace Tallerrs\BharPhyit\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Tallerrs\BharPhyit\Exceptions\ForbiddenException;
+use Tallerrs\BharPhyit\Jobs\BharPhyitSentNotification;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Notifications\Channels\MailNotification;
 use Tallerrs\BharPhyit\Notifications\Channels\SlackNotification;
@@ -73,7 +74,11 @@ class ExceptionNotification
     {        
         foreach ($this->notifications as $notification) {
             try {
-                (new $notification($bharPhyitErrorLog))->sendNotifications();
+                BharPhyitSentNotification::dispatch(
+                    notification: $notification,
+                    bharPhyitErrorLog: $bharPhyitErrorLog
+                );
+                // (new $notification($bharPhyitErrorLog))->sendNotifications();
             } catch (\Exception $e) {
                 error_log("Failed to send notification: " . $e->getMessage());
             }
