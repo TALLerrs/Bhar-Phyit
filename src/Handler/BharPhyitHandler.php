@@ -8,9 +8,8 @@ use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Backtrace\Backtrace;
-use Tallerrs\BharPhyit\Properties\BharPhyitErrorProperties;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
@@ -46,10 +45,9 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     public function shouldReport(Throwable $e)
     {
-        if (((!config('bhar-phyit.enabled')) && $this->isExceptException($e))) {
+        if ((!config('bhar-phyit.enabled')) && $this->isExceptException($e)) {
             return false;
         } else {
-            return true;
             $hash = $this->hashError($e);
 
             $lock = Cache::lock($hash, 30);
@@ -254,7 +252,13 @@ class BharPhyitHandler extends ExceptionsHandler
      */
     protected function isExceptException(Throwable $throwable): bool
     {
-        return in_array(get_class($throwable), config('bhar-phyit.except', []));
+        $dontReport = array_merge(config('bhar-phyit.except', []), $this->internalDontReport);
+
+        if (! is_null(Arr::first($dontReport, fn ($type) => $throwable instanceof $type))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
