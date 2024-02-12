@@ -278,8 +278,8 @@
                         </span>
                     </div>
                 </div>
-                <div class="dark:bg-gray-800/20 group py-2 px-5 relative">
-                    <div class="overflow-y-hidden overflow-x-scroll scrollbar-hidden-x">
+                <div x-data="{ isShow : false }" class="dark:bg-gray-800/20 group py-2 px-5 relative">
+                    <div class="transition overflow-y-hidden overflow-x-hidden scrollbar-hidden-x" :class="isShow ? '' : 'max-h-[100px]'" @click="isShow=!isShow">
                         <code class="leading-relaxed text-sm font-normal">
                             {{ $query->sql }}
                         </code>
