@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 use Tallerrs\BharPhyit\Services\BharPhyitService;
 use Throwable;
 
@@ -20,6 +21,7 @@ class BharPhyitReporter implements ShouldQueue
     public function __construct(
         protected Throwable $throwable,
         protected string $hash,
+        protected array $queries
     )
     {
         //
@@ -35,7 +37,8 @@ class BharPhyitReporter implements ShouldQueue
     {
         (new BharPhyitService())->storeBharPhyitErrorLog(
             throwable: $this->throwable,
-            hash : $this->hash
+            hash : $this->hash,
+            queries: $this->queries,
         );
     }
 }

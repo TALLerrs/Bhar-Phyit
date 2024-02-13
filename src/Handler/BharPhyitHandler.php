@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Tallerrs\BharPhyit\Jobs\BharPhyitReporter;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionsHandler;
+use Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder;
 
 class BharPhyitHandler extends ExceptionsHandler
 {
@@ -27,7 +28,8 @@ class BharPhyitHandler extends ExceptionsHandler
     public function report(Throwable $exception)
     {
         if ($this->shouldReport($exception)) {
-            BharPhyitReporter::dispatch($exception, $this->hash);
+            $queries = app()->make(QueryRecorder::class)->getQueries();
+            BharPhyitReporter::dispatch($exception, $this->hash, $queries);
         }
 
         parent::report($exception);

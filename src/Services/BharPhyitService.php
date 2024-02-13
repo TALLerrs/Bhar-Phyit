@@ -25,7 +25,7 @@ class BharPhyitService
      * 
      * @return void
      */
-    public function storeBharPhyitErrorLog(Throwable $throwable, string $hash): void
+    public function storeBharPhyitErrorLog(Throwable $throwable, string $hash, array $queries): void
     {
         $unsolvedErrorLog = $this->getUnresolveErrorLog($throwable, $hash);
 
@@ -33,7 +33,7 @@ class BharPhyitService
             return;
         }
 
-        $this->queries = app()->make(QueryRecorder::class)->getQueries();
+        $this->queries = $queries;
 
         $this->storeBharPhyitDetails($unsolvedErrorLog);
 
