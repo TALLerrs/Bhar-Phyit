@@ -254,44 +254,50 @@
             </div>
         @endif
     </div>
-    <div class="col-span-full space-y-5">
-        <div class="relative flex flex-col gap-4 space-y-3 justify-start text-sm px-7 py-5 dark:bg-[#18181B]/40 bg-white shadow-md dark:ring-white/10 rounded-xl">
-            <div class="absolute top-[-10px] left-1/2 px-3 py-2 z-10 bg-indigo-500 rounded-full text-[12px]">
-                <span class="p-1 rounded-full bg-gray-900/20">{{ count($bharPhyitErrorLog->detail->getQueries()) }}</span>
-                <span>QUERIES</span>
-            </div>
-            @foreach ($bharPhyitErrorLog->detail->getQueries() as $query)
-            <div class="space-y-2 relative">
-                <div class="flex gap-2 text-xs">
-                    <div class="px-2 py-1 border-[1px] rounded-md border-gray-500/30 flex gap-2 items-center">
-                        <span>
-                            <x-bhar-phyit-icon::clock />
-                        </span>
-                        <span>{{ $query->time }} MS</span>
-                    </div>
-                    <div class="px-2 py-1 border-[1px] rounded-md border-gray-500/30 flex gap-2 items-center">
-                        <span>
-                            <x-bhar-phyit-icon::database />
-                        </span>
-                        <span>
-                            {{ str($query->connection_name)->upper() }}
-                        </span>
-                    </div>
+    @php
+        $bharPhyitDetails = $bharPhyitErrorLog->detail->getQueries();
+        $bharPhyitDetailCount =  count($bharPhyitDetails);
+    @endphp
+    @if($bharPhyitDetailCount > 0)
+        <div class="col-span-full space-y-5">
+            <div class="relative flex flex-col gap-4 space-y-3 justify-start text-sm px-7 py-5 dark:bg-[#18181B]/40 bg-white shadow-md dark:ring-white/10 rounded-xl">
+                <div class="absolute top-[-10px] left-1/2 px-3 py-2 z-10 bg-indigo-500 rounded-full text-[12px]">
+                    <span class="p-1 rounded-full bg-gray-900/20">{{ $bharPhyitDetailCount }}</span>
+                    <span>QUERIES</span>
                 </div>
-                <div x-data="{ isShow : false }" class="dark:bg-gray-800/20 group py-2 px-5 relative">
-                    <div class="transition overflow-y-hidden overflow-x-hidden scrollbar-hidden-x" :class="isShow ? '' : 'max-h-[100px]'" @click="isShow=!isShow">
-                        <code class="leading-relaxed text-sm font-normal">
-                            {{ $query->sql }}
-                        </code>
+                @foreach ($bharPhyitDetails as $query)
+                    <div class="space-y-2 relative">
+                        <div class="flex gap-2 text-xs">
+                            <div class="px-2 py-1 border-[1px] rounded-md border-gray-500/30 flex gap-2 items-center">
+                                <span>
+                                    <x-bhar-phyit-icon::clock />
+                                </span>
+                                <span>{{ $query->time }} MS</span>
+                            </div>
+                            <div class="px-2 py-1 border-[1px] rounded-md border-gray-500/30 flex gap-2 items-center">
+                                <span>
+                                    <x-bhar-phyit-icon::database />
+                                </span>
+                                <span>
+                                    {{ str($query->connection_name)->upper() }}
+                                </span>
+                            </div>
+                        </div>
+                        <div x-data="{ isShow : false }" class="dark:bg-gray-800/20 group py-2 px-5 relative">
+                            <div class="transition overflow-y-hidden overflow-x-hidden scrollbar-hidden-x" :class="isShow ? '' : 'max-h-[100px]'" @click="isShow=!isShow">
+                                <code class="leading-relaxed text-sm font-normal">
+                                    {{ $query->sql }}
+                                </code>
+                            </div>
+                            <div class="absolute top-2 right-3">
+                                <button type="button" class="w-4 h-4 rounded-full flex items-center justify-center text-xs text-indigo-500 hover:~text-indigo-600  transition-animation shadow-md hover:shadow-lg active:shadow-sm active:translate-y-px&quot; opacity-0 transform scale-80 transition-animation delay-100 group-hover:opacity-100 group-hover:scale-100" title="Copy to clipboard">
+                                    <x-bhar-phyit-icon::copy />
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="absolute top-2 right-3">
-                        <button type="button" class="w-4 h-4 rounded-full flex items-center justify-center text-xs text-indigo-500 hover:~text-indigo-600  transition-animation shadow-md hover:shadow-lg active:shadow-sm active:translate-y-px&quot; opacity-0 transform scale-80 transition-animation delay-100 group-hover:opacity-100 group-hover:scale-100" title="Copy to clipboard">
-                            <x-bhar-phyit-icon::copy />
-                        </button>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
-    </div>
+    @endif
 </div>
