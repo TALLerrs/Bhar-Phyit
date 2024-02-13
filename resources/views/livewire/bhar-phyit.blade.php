@@ -8,7 +8,7 @@
         </a>
         @endforeach
     </div>
-    <div class="pt-5">
-        {{ $bharPhyits->links() }}
+    <div class="p-5">
+        {{ $bharPhyits->links('pagination::tailwind') }}
     </div>
 </div>

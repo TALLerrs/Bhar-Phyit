@@ -5,6 +5,7 @@ namespace Tallerrs\BharPhyit\Http\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
@@ -27,7 +28,7 @@ class BharPhyit extends Component
             'bharPhyits' => BharPhyitErrorLog::query()
                 ->select('id', 'title', 'status', 'last_occurred_at', 'url', 'occurrences')
                 ->orderBy('last_occurred_at')
-                ->paginate(10),
+                ->paginate(),
         ]);
     }
 }
