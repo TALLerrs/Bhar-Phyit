@@ -8,9 +8,6 @@
     
     {!! Tallerrs\BharPhyit\Facades\BharPhyit::css() !!}
     @livewireStyles
-
-    {!! Tallerrs\BharPhyit\Facades\BharPhyit::js() !!}
-    @livewireScriptConfig
 </head>
 
 <body>
@@ -20,6 +17,9 @@
             {{ $slot }}
         </section>
     </div>
-</body>
 
+    {{-- {!! Tallerrs\BharPhyit\Facades\BharPhyit::js() !!}
+    @livewireScriptConfig --}}
+</body>
+ @livewireScripts()
 </html>

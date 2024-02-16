@@ -1,51 +1,51 @@
 {
-    "name": "tallerrs/bhar-phyit",
-    "description": "Error Tracking and Debugging tool for laravel based project.",
-    "type": "library",
-    "require": {
-        "monolog/monolog": "^3.5",
-        "illuminate/support": "^10.38",
-        "php": "^8.2",
-        "livewire/livewire": "^3.3"
-    },
-    "require-dev": {
-        "pestphp/pest": "^2.28"
-    },
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Tallerrs\\BharPhyit\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Swan Yee Tun",
-            "role": "Developer"
-        },
-        {
-            "name": "Myo Zin Kyaw",
-            "role": "Developer"
-        },
-        {
-            "name": "Thet Tun Aung",
-            "role": "Developer"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Tallerrs\\BharPhyit\\BharPhyitServiceProvider"
-            ]
-        },
-        "aliases": {
-            "BharPhyit": "Tallerrs\\BharPhyit\\BharPhyit"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": false
-        }
+  "name": "tallerrs/bhar-phyit",
+  "description": "Error Tracking and Debugging tool for laravel based project.",
+  "type": "library",
+  "require": {
+    "monolog/monolog": "^3.5",
+    "illuminate/support": "^10.38",
+    "php": "^8.2",
+    "livewire/livewire": "^3.3"
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.28"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Tallerrs\\BharPhyit\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Swan Yee Tun",
+      "role": "Developer"
+    },
+    {
+      "name": "Myo Zin Kyaw",
+      "role": "Developer"
+    },
+    {
+      "name": "Thet Tun Aung",
+      "role": "Developer"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Tallerrs\\BharPhyit\\BharPhyitServiceProvider"
+      ]
+    },
+    "aliases": {
+      "BharPhyit": "Tallerrs\\BharPhyit\\BharPhyit"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": false
+    }
+  }
 }

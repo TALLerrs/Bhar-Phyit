@@ -193,23 +193,23 @@
 
             <dl class="grid grid-cols-1 gap-2">
                 @foreach($bharPhyitErrorLog->detail->getHeaders() as $header => $value)
-                @if (data_get($value, '0'))
-                <div class="flex items-baseline gap-10">
-                    <dt class="flex-none truncate w-[8rem]">{{ $header }}</dt>
-                    <dd class="flex-grow min-w-0">
-                        <div class="dark:bg-gray-200/5 group py-2 px-5 relative">
-                            <div class="overflow-y-hidden max-h-32 overflow-x-scroll scrollbar-hidden-x">
-                                <code class="leading-relaxed text-sm font-normal">{{ str(data_get($value, '0'))->limit(120, '') }}</code>
+                    @if (data_get($value, '0'))
+                    <div class="flex items-baseline gap-10">
+                        <dt class="flex-none truncate w-[8rem]">{{ $header }}</dt>
+                        <dd class="flex-grow min-w-0">
+                            <div class="dark:bg-gray-200/5 group py-2 px-5 relative">
+                                <div class="overflow-y-hidden max-h-32 overflow-x-scroll scrollbar-hidden-x">
+                                    <code class="leading-relaxed text-sm font-normal">{{ str(data_get($value, '0'))->limit(120, '') }}</code>
+                                </div>
+                                <div class="absolute top-2 right-3">
+                                    <button type="button" class="w-4 h-4 rounded-full flex items-center justify-center text-xs text-indigo-500 hover:~text-indigo-600  transition-animation shadow-md hover:shadow-lg active:shadow-sm active:translate-y-px&quot; opacity-0 transform scale-80 transition-animation delay-100 group-hover:opacity-100 group-hover:scale-100" title="Copy to clipboard">
+                                        <x-bhar-phyit-icon::copy />
+                                    </button>
+                                </div>
                             </div>
-                            <div class="absolute top-2 right-3">
-                                <button type="button" class="w-4 h-4 rounded-full flex items-center justify-center text-xs text-indigo-500 hover:~text-indigo-600  transition-animation shadow-md hover:shadow-lg active:shadow-sm active:translate-y-px&quot; opacity-0 transform scale-80 transition-animation delay-100 group-hover:opacity-100 group-hover:scale-100" title="Copy to clipboard">
-                                    <x-bhar-phyit-icon::copy />
-                                </button>
-                            </div>
-                        </div>
-                    </dd>
-                </div>
-                @endif
+                        </dd>
+                    </div>
+                    @endif
                 @endforeach
             </dl>
         </div>
