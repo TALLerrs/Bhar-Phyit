@@ -1,7 +1,16 @@
 <div class="md:col-span-12 relative">
-    <div class="grid w-full place-items-center pt-10">
-        <div class="flex w-[50%] rounded-xl border shadow-md dark:bg-[#18181B]">
+    <div class="grid w-full place-items-center pt-10  md:grid-cols-3">
+        <div>
+        </div>
+        <div class="flex w-full rounded-xl border shadow-md dark:bg-[#18181B] mr-10">
             <input type="search" class="w-full border-none bg-transparent px-4 py-2 focus:outline-none text-white" placeholder="search..." wire:model.live="search"/>
+        </div>
+        <div class="w-full">
+            <select name="" id="" class="w-[30%] border-none bg-transparent px-4 py-2 focus:outline-none text-white rounded-xl border shadow-md dark:bg-[#18181B]" wire:model.live="filterOption">
+                <option value="unsolved" selected="selected">Un Solved</option>
+                <option value="solved">Solved</option>
+                <option value="snoozed">Snoozed</option>
+            </select>
         </div>
     </div>
     <div class="grid md:grid-cols-3 gap-5 p-10">

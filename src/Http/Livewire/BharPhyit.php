@@ -21,6 +21,7 @@ class BharPhyit extends Component
     use CanAccessBharPhyit;
 
     public $search = "";
+    public $filterOption = "";
 
     #[Title('Bhar Phyit')]
     public function mount()
@@ -53,6 +54,9 @@ class BharPhyit extends Component
                 ->when($this->search != "", function (Builder $query) {
                     $query->where('title', 'LIKE', "%{$this->search}%");
                 })
+                ->when($this->filterOption == "unsolved",fn($query) => $query->whereNull('resolved_at'))
+                ->when($this->filterOption == "solved",fn($query) => $query->whereNotNull('resolved_at'))
+                ->when($this->filterOption == "snoozed",fn($query) => $query->where('snooze_until','>=',now()))
                 ->orderBy('last_occurred_at')
                 ->paginate(),
         ]);
