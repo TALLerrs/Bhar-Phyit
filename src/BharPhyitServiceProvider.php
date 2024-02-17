@@ -13,6 +13,7 @@ use Tallerrs\BharPhyit\Http\Livewire\Components\ThemeBtn;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\View\Compilers\BladeCompiler;
 use Tallerrs\BharPhyit\Http\Livewire\BharPhyit as LivewireBharPhyit;
+use Tallerrs\BharPhyit\Http\Livewire\BharPhyitDetail as LivewireBharPhyitDetail;
 
 class BharPhyitServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,7 @@ class BharPhyitServiceProvider extends ServiceProvider
          */
         Livewire::component('theme-btn', ThemeBtn::class);
         Livewire::component('bhar-phyit', LivewireBharPhyit::class);
+        Livewire::component('bhar-phyit-detail', LivewireBharPhyitDetail::class);
 
         Blade::directive('formatSql', function ($expression) {
             return "<?php echo \\Tallerrs\\BharPhyit\\BharPhyitServiceProvider::formatSql($expression); ?>";

@@ -21,7 +21,7 @@ class BharPhyit extends Component
     use CanAccessBharPhyit;
 
     public $search = "";
-    public $filterOption = "";
+    public $filterOption = "unsolved";
 
     #[Title('Bhar Phyit')]
     public function mount()
