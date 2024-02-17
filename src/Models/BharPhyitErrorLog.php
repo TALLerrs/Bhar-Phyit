@@ -19,6 +19,7 @@ class BharPhyitErrorLog extends BharPhyitBaseModel
         'line',
         'error_code_lines',
         'resolved_at',
+        // 'resolved_by',
         'status',
         'additionals',
         'snooze_until',

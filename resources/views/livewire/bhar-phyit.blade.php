@@ -6,11 +6,22 @@
     </div>
     <div class="grid md:grid-cols-3 gap-5 p-10">
         @foreach($bharPhyits as $bharPhyit)
-            <a href="{{ route('bhar-phyit-detail', $bharPhyit) }}" wire:navigate class="justify-start text-sm px-7 py-5 dark:bg-[#18181B] bg-white flex flex-col gap-3 shadow-md ring-1 ring-gray-950/5 dark:ring-white/10 rounded-xl">
-                <h1 class="text-wrap">{{ str($bharPhyit->title)->limit(100, '...') }}</h1>
-                <p>Last occured : {{ $bharPhyit->last_occurred_at->dtString() }}</p>
-                <span>Occurrences : {{ $bharPhyit->occurrences }}</span>
-            </a>
+            <div class="justify-start text-sm dark:bg-[#18181B] bg-white flex flex-col gap-3 shadow-md ring-1 ring-gray-950/5 dark:ring-white/10 rounded-xl relative" x-data="{ isHover : false }" @mouseover="isHover = true" @mouseover.away="isHover = false">
+                <a class="px-7 py-5" href="{{ route('bhar-phyit-detail', $bharPhyit) }}" wire:navigate>
+                    <h1 class="text-wrap">{{ str($bharPhyit->title)->limit(100, '...') }}</h1>
+                    <p>Last occured : {{ $bharPhyit->last_occurred_at->dtString() }}</p>
+                    <span>Occurrences : {{ $bharPhyit->occurrences }}</span>
+                </a>
+                <span x-show="isHover" class="absolute right-0 left-auto ring-1 rounded-bl-xl rounded-tr-xl p-2 ring-gray-950/5 dark:ring-white/10">
+                <button type="button" wire:click="solve({{ $bharPhyit }})">
+                    @if(is_null($bharPhyit->resolved_at))
+                        Solve
+                    @else
+                        unSolve
+                    @endif
+                </button>
+                </span>
+            </div>
         @endforeach
     </div>
     <div class="p-5">

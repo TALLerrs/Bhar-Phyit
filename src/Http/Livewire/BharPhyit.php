@@ -7,9 +7,11 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 
 #[Layout('bhar-phyit::dashboard')]
@@ -26,11 +28,28 @@ class BharPhyit extends Component
         // $this->authorizeAccess();
     }
 
+    /**
+     * Solve And Unsolve function for BharPhyitErrorLog 
+     * 
+     * @param array $bharPhyit Livewire component array
+     * 
+     * @return void
+     */
+    public function solve(array $bharPhyit): void
+    {
+        $errorLog = BharPhyitErrorLog::findOrFail($bharPhyit['id']);
+
+        $errorLog->update([
+            'resolved_at' => $errorLog->resolved_at ? null : now(),
+            'status' => $errorLog->resolved_at ? BharPhyitErrorLogStatus::READ : BharPhyitErrorLogStatus::RESOLVED,
+        ]);
+    }
+
     public function render()
     {
         return view('bhar-phyit::livewire.bhar-phyit', [
             'bharPhyits' => BharPhyitErrorLog::query()
-                ->select('id', 'title', 'status', 'last_occurred_at', 'url', 'occurrences')
+                ->select('id', 'title', 'status', 'last_occurred_at', 'url', 'occurrences','resolved_at','status')
                 ->when($this->search != "", function (Builder $query) {
                     $query->where('title', 'LIKE', "%{$this->search}%");
                 })
