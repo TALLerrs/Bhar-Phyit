@@ -6,7 +6,7 @@
             <input type="search" class="w-full border-none bg-transparent px-4 py-2 focus:outline-none text-white" placeholder="search..." wire:model.live="search"/>
         </div>
         <div class="w-full">
-            <select name="" id="" class="w-[30%] border-none bg-transparent px-4 py-2 focus:outline-none text-white rounded-xl border shadow-md dark:bg-[#18181B]" wire:model.live="filterOption">
+            <select name="" id="" class="w-[30%] bg-transparent px-4 py-2 focus:outline-none text-white rounded-xl border shadow-md dark:bg-[#18181B]" wire:model.live="filterOption">
                 <option value="unsolved" selected="selected">Un Solved</option>
                 <option value="solved">Solved</option>
                 <option value="snoozed">Snoozed</option>
@@ -21,15 +21,24 @@
                     <p>Last occured : {{ $bharPhyit->last_occurred_at->dtString() }}</p>
                     <span>Occurrences : {{ $bharPhyit->occurrences }}</span>
                 </a>
-                <span x-show="isHover" class="absolute right-0 left-auto ring-1 rounded-bl-xl rounded-tr-xl p-2 ring-gray-950/5 dark:ring-white/10">
-                <button type="button" wire:click="solve({{ $bharPhyit }})">
-                    @if(is_null($bharPhyit->resolved_at))
-                        Solve
-                    @else
-                        unSolve
-                    @endif
-                </button>
-                </span>
+                <div x-show="isHover" class="absolute right-0 left-auto ring-1 rounded-bl-xl rounded-tr-xl ring-gray-950/5 dark:ring-white/10 dark:bg-[#18181B]">
+                    <div class="flex">
+                        <button type="button" wire:click="snooze('{{ $bharPhyit->id }}')" class="p-2 border-r border-white/10">
+                            @if($bharPhyit->isSnoozed())
+                                unSnoozed
+                            @else
+                                Snoozed
+                            @endif
+                        </button>
+                        <button type="button" wire:click="solve('{{ $bharPhyit->id }}')" class="p-2">
+                            @if(is_null($bharPhyit->resolved_at))
+                                Solve
+                            @else
+                                unSolve
+                            @endif
+                        </button>
+                    </div>
+                </div>
             </div>
         @endforeach
     </div>

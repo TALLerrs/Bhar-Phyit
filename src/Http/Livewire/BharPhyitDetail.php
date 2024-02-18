@@ -9,11 +9,13 @@ use Livewire\Attributes\Title;
 use Tallerrs\BharPhyit\Enums\BharPhyitErrorLogStatus;
 use Tallerrs\BharPhyit\Http\Livewire\Permission\CanAccessBharPhyit;
 use Tallerrs\BharPhyit\Models\BharPhyitErrorLog;
+use Tallerrs\BharPhyit\Trait\BharPhyitAction;
 
 #[Layout('bhar-phyit::dashboard')]
 class BharPhyitDetail extends Component
 {
     use CanAccessBharPhyit;
+    use BharPhyitAction;
 
     public ?User $user;
     public string $appName;
@@ -28,23 +30,6 @@ class BharPhyitDetail extends Component
         $this->authorizeAccess();
 
         $this->appName = config('app.name');
-    }
-
-        /**
-     * Solve And Unsolve function for BharPhyitErrorLog 
-     * 
-     * @param array $bharPhyit Livewire component array
-     * 
-     * @return void
-     */
-    public function solve(array $bharPhyit): void
-    {
-        $errorLog = BharPhyitErrorLog::findOrFail($bharPhyit['id']);
-
-        $errorLog->update([
-            'resolved_at' => $errorLog->resolved_at ? null : now(),
-            'status' => $errorLog->resolved_at ? BharPhyitErrorLogStatus::READ : BharPhyitErrorLogStatus::RESOLVED,
-        ]);
     }
 
     public function render()

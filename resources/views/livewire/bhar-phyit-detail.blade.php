@@ -1,14 +1,27 @@
 <div class="col-span-full space-y-5 p-10">
-    @if(is_null($bharPhyitErrorLog->resolved_at))
         <div class="flex justify-between">
             <div></div>
-            <button
-                class="middle none center mr-4 rounded-lg dark:bg-[#18181B] py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-gray-950/5 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ring-1 ring-gray-950/5 dark:ring-white/10" wire:click="solve({{ $bharPhyitErrorLog }})"
-                >
-                Solve
+            <div>
+                <button
+                    class="middle none center mr-4 rounded-lg dark:bg-[#18181B] py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-gray-950/5 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ring-1 ring-gray-950/5 dark:ring-white/10" wire:click="snooze('{{ $bharPhyitErrorLog->id }}')"
+                    >
+                @if($bharPhyitErrorLog->isSnoozed())
+                    unSnooze
+                @else
+                    Snooze
+                @endif
                 </button>
+                <button
+                    class="middle none center mr-4 rounded-lg dark:bg-[#18181B] py-2 px-3 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-gray-950/5 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ring-1 ring-gray-950/5 dark:ring-white/10" wire:click="solve('{{ $bharPhyitErrorLog->id }}')"
+                    >
+                    @if(is_null($bharPhyitErrorLog->resolved_at))
+                        Solve
+                    @else
+                        unSolve
+                    @endif
+                </button>
+            </div>
         </div>
-    @endif
     <div class="flex flex-col gap-4 justify-start text-sm px-7 py-5 dark:bg-[#18181B] bg-white shadow-md ring-1 ring-gray-950/5 dark:ring-white/10 rounded-xl">
         <div aria-label="error type" class="text-base px-3 flex justify-between">
             <div>{{ $bharPhyitErrorLog->getErrorType() }}</div>
